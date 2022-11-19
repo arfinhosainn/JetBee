@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "281928216539",
+    "project_id": "jetbee-5f678",
+    "storage_bucket": "jetbee-5f678.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:281928216539:android:3280b1bc2c4b586bcd41fe",
+        "android_client_info": {
+          "package_name": "com.example.jetbee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "281928216539-n5khrok4kgn9dojevv3rn25q1vrvmv9d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwQzD0Zpcv4n7_m7HSniRUidXfQsO6K80"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "281928216539-n5khrok4kgn9dojevv3rn25q1vrvmv9d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
