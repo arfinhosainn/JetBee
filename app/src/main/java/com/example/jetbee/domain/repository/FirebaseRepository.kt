@@ -24,8 +24,6 @@ interface FirebaseRepository {
 
     suspend fun getUserData(userId: String): AuthUser?
 
-   suspend fun getProductDetails(name:String): Product?
-
     fun currentUserExist(): Flow<Boolean>
 
     fun signOut()

@@ -16,14 +16,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.jetbee.domain.model.CartProducts
-import com.example.jetbee.domain.model.Product
-import com.example.jetbee.navigation.Screens
 import com.example.jetbee.presentaion.common.RegularFont
 import com.example.jetbee.presentaion.common.UserViewModel
-import com.example.jetbee.presentaion.detail_screen.ProductDetailViewModel
 import com.example.jetbee.ui.theme.LightBlack
 
 @Composable

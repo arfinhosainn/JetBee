@@ -9,10 +9,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Composable
 fun MainDetailScreen(
     name: String,
-    viewModel: ProductDetailViewModel = hiltViewModel(),
     product: Product
 ) {
-    val productDetail  = viewModel.product.value
 
     DetailScreen(product = product)
 }

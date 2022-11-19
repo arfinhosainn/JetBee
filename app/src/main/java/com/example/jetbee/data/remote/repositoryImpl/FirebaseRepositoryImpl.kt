@@ -18,7 +18,6 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -72,18 +71,6 @@ class FirebaseRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getProductDetails(name:String): Product? {
-        val docRef = fireStore.collection("products").document(name)
-        return docRef.get().addOnSuccessListener { document ->
-            document.toObject(Product::class.java)
-            Log.d("nothingh", "$docRef")
-        }.addOnFailureListener {
-            it.toString()
-        }.await().toObject(Product::class.java)
-
-    }
-
-
     override fun addCoffeeToCart(
         cartProduct: CartProducts,
         userId: String
@@ -119,7 +106,6 @@ class FirebaseRepositoryImpl @Inject constructor(
         }.addOnFailureListener {
             it.toString()
         }.await().toObject(AuthUser::class.java)
-
     }
 
 
@@ -143,7 +129,6 @@ class FirebaseRepositoryImpl @Inject constructor(
         onFailure: (String?) -> Unit
     ) {
         val collectionRef = fireStore.collection("orders")
-
         val rootRef = firebaseRealTimeDatabase.reference
         val counRef = rootRef.child("counters").child("orders").child("count")
 
@@ -186,7 +171,6 @@ class FirebaseRepositoryImpl @Inject constructor(
             transaction.update(document, QUANTITY, quantity)
         }
     }
-
 
     private val userCartCollection = currentUser()?.uid?.let {
         fireStore.collection(USER_COLLECTION)

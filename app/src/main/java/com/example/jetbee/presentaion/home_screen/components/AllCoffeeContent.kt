@@ -33,7 +33,6 @@ import com.example.jetbee.presentaion.cart_screen.CoffeeCartViewModel
 import com.example.jetbee.presentaion.common.RegularFont
 import com.example.jetbee.presentaion.common.UserViewModel
 import com.example.jetbee.presentaion.destinations.MainDetailScreenDestination
-import com.example.jetbee.presentaion.detail_screen.ProductDetailViewModel
 import com.example.jetbee.ui.theme.LightBlack
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.CoroutineScope
@@ -65,17 +64,13 @@ fun CoffeeCard(
     userViewModel: UserViewModel = hiltViewModel(),
     coffeeCartViewModel: CoffeeCartViewModel = hiltViewModel(),
     navigator: DestinationsNavigator,
-    detailViewModel: ProductDetailViewModel = hiltViewModel()
-
     ) {
-    val state  = detailViewModel.product.value
 
     Card(
         modifier = Modifier
             .height(270.dp)
             .padding(6.dp)
             .clickable {
-                detailViewModel.setProduct(product)
                 navigator.navigate(
                     MainDetailScreenDestination(product.name, product = product  )
                 )
