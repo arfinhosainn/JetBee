@@ -3,6 +3,7 @@ package com.example.jetbee
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.example.jetbee.navigation.NavigationGraph
 import com.example.jetbee.presentaion.NavGraphs
 import com.example.jetbee.ui.theme.JetBeeTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -14,7 +15,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             JetBeeTheme {
-               DestinationsNavHost(navGraph = NavGraphs.root)
+                NavigationGraph()
+             DestinationsNavHost(navGraph = NavGraphs.root)
             }
         }
     }

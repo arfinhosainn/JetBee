@@ -1,6 +1,11 @@
 package com.example.jetbee.presentaion.signin_screen
 
+import android.app.Activity.RESULT_OK
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,30 +22,31 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.example.jetbee.R
 import com.example.jetbee.domain.model.AuthUser
 import com.example.jetbee.navigation.Screens
 import com.example.jetbee.presentaion.common.AuthenticationField
+import com.example.jetbee.presentaion.common.RegularFont
+import com.google.android.gms.auth.api.identity.BeginSignInResult
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.GoogleAuthProvider.getCredential
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Destination
+@Destination(start = true)
 @Composable
-fun SignInScreen(
-        navController: NavHostController,
-    signInViewModel: FirebaseSingInViewModel = hiltViewModel(), navigator: DestinationsNavigator
-) {
+fun SignInScreen(navController: NavController,
+    oneTapSignInViewModel: OneTapSignInViewModel = hiltViewModel(),
+    signInViewModel: FirebaseSingInViewModel = hiltViewModel(),
+    ) {
+
 
     val signInState = signInViewModel.signInState.collectAsState(initial = null)
-
-
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     var isLoading by remember {
@@ -74,14 +80,17 @@ fun SignInScreen(
             Text(
                 modifier = Modifier.padding(bottom = 15.dp),
                 text = "Welcome Back",
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 35.sp
+                fontWeight = FontWeight.Bold,
+                fontSize = 35.sp,
+                fontFamily = RegularFont,
             )
             Text(
                 text = "Log in to Continue",
-                fontWeight = FontWeight.Bold,
-                fontSize = 15.sp, color = Color.Gray
-            )
+                fontWeight = FontWeight.Medium,
+                fontSize = 15.sp, color = Color.Gray,
+                fontFamily = RegularFont,
+
+                )
             AuthenticationField(
                 text = email,
                 placeHolder = "Email",
@@ -127,8 +136,9 @@ fun SignInScreen(
                     .align(Alignment.End)
                     .padding(end = 20.dp, top = 10.dp),
                 text = "Forgot Password?",
-                fontWeight = FontWeight.Bold, color = Color.Red
-            )
+                fontWeight = FontWeight.SemiBold, color = Color.Red, fontFamily = RegularFont,
+
+                )
             Button(
                 onClick = {
                     scope.launch(Dispatchers.Main) {
@@ -138,6 +148,7 @@ fun SignInScreen(
                             )
                         )
                     }
+
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -148,18 +159,26 @@ fun SignInScreen(
                 ),
                 shape = RoundedCornerShape(15.dp)
             ) {
-                Text(text = "Sign In", color = Color.White, modifier = Modifier.padding(7.dp))
+                Text(
+                    text = "Sign In",
+                    color = Color.White,
+                    modifier = Modifier
+                        .padding(7.dp)
+                )
             }
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 if (signInState.value?.isLoading == true) {
                     CircularProgressIndicator()
                 }
             }
             Text(
                 modifier = Modifier
-                    .padding(15.dp),
+                    .padding(15.dp)
+                    .clickable {
+                        navController.navigate(Screens.FireSignUpScreen.route)
+                    },
                 text = "Don't have an account? sign up",
-                fontWeight = FontWeight.Bold, color = Color.Black
+                fontWeight = FontWeight.Bold, color = Color.Black, fontFamily = RegularFont
             )
             Text(
                 modifier = Modifier
@@ -188,9 +207,33 @@ fun SignInScreen(
             navController.popBackStack()
             val successful = signInState.value?.isSignedIn
             Toast.makeText(context, successful, Toast.LENGTH_LONG).show()
-            navController.navigate(Screens.HomeScreen.route)
+            navController.navigate(
+                Screens.HomeScreen.route
+            )
         }
+
     }
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                try {
+                    val credentials =
+                        oneTapSignInViewModel.oneTapClient.getSignInCredentialFromIntent(result.data)
+                    val googleIdToken = credentials.googleIdToken
+                    val googleCredentials = getCredential(googleIdToken, null)
+                    oneTapSignInViewModel.signInWithGoogle(googleCredentials)
+                } catch (it: ApiException) {
+                    print(it)
+                }
+            }
+        }
+
+    fun launch(signInResult: BeginSignInResult) {
+        val intent = IntentSenderRequest.Builder(signInResult.pendingIntent.intentSender).build()
+        launcher.launch(intent)
+    }
+
+
 }
 
 

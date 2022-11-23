@@ -49,7 +49,7 @@ fun AuthenticationField(
 fun CustomTextField(
     value: String,
     modifier: Modifier = Modifier,
-    textStyle: TextStyle = LocalTextStyle.current,
+    textStyle: TextStyle = TextStyle(fontFamily = RegularFont),
     label: @Composable (() -> Unit)? = null,
     placeHolder: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
@@ -83,7 +83,7 @@ fun CustomTextField(
         maxLines = maxLines,
         interactionSource = interactionSource,
         shape = shape,
-        colors = colors
+        colors = colors,
     )
 
     if (isError) {

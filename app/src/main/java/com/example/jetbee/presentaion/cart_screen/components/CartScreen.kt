@@ -12,21 +12,20 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.jetbee.domain.model.Product
+import com.example.jetbee.R
 import com.example.jetbee.presentaion.common.UserViewModel
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 
 @Destination
 @Composable
-fun CartScreen(navigator: DestinationsNavigator,
-    userViewModel: UserViewModel = hiltViewModel(),
+fun CartScreen(
     navController: NavHostController,
-
+    userViewModel: UserViewModel = hiltViewModel(),
 ) {
 
     Column(
@@ -35,7 +34,11 @@ fun CartScreen(navigator: DestinationsNavigator,
     ) {
         Scaffold(
             topBar = {
-                CartScreenHeader(title = "My Cart", navController = navController)
+                AppTopBar(
+                    title = "My Cart", navController = navController, navIcon = painterResource(
+                        id = R.drawable.back_icon
+                    )
+                )
             }, content = { padding ->
                 Card(
                     modifier = Modifier

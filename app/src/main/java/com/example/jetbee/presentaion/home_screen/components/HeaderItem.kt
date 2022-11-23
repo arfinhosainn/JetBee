@@ -2,15 +2,11 @@ package com.example.jetbee.presentaion.home_screen.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Badge
-import androidx.compose.material.BadgedBox
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,45 +20,41 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.jetbee.R
 import com.example.jetbee.presentaion.common.RegularFont
+import com.ramcosta.composedestinations.annotation.Destination
 
+@Destination
 @Composable
-fun HeaderItem() {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Image(
-                painter = painterResource(id = R.drawable.coffee),
-                contentDescription = "profile image",
-                modifier = Modifier
-                    .size(58.dp)
-                    .clip(
-                        CircleShape
-                    )
+fun TopBar(onNavigationIconClick: () -> Unit) {
+    TopAppBar(modifier = Modifier.padding(top = 20.dp, start = 20.dp, end = 20.dp), title = {
+        Column {
+            Text(
+                text = "Hi, Good Morning",
+                textAlign = TextAlign.Start,
+                fontFamily = RegularFont,
+                fontWeight = FontWeight.Medium,
+                fontSize = 12.sp,
+                color = Color.Gray
             )
-            Column(modifier = Modifier.padding(start = 10.dp)) {
-                Text(
-                    text = "Hi, Good Morning",
-                    textAlign = TextAlign.Start,
-                    fontFamily = RegularFont,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 12.sp,
-                    color = Color.Gray
-                )
-                Text(
-                    text = "Arfin Hosain",
-                    textAlign = TextAlign.Start,
-                    fontFamily = RegularFont,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 18.sp
-                )
-
-            }
-
+            Text(
+                text = "Arfin Hosain",
+                textAlign = TextAlign.Start,
+                fontFamily = RegularFont,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp
+            )
         }
+    }, navigationIcon = {
+        Image(painter = painterResource(id = R.drawable.coffee),
+            contentDescription = "profile image",
+            modifier = Modifier
+                .size(58.dp)
+                .clip(
+                    CircleShape
+                )
+                .clickable {
+                    onNavigationIconClick()
+                })
+    }, actions = {
         BadgedBox(
             badge = { Badge(modifier = Modifier.size(10.dp), backgroundColor = Color.Red) {} },
         ) {
@@ -73,27 +65,25 @@ fun HeaderItem() {
                 modifier = Modifier
                     .defaultMinSize(minWidth = radius * 2, minHeight = radius * 2)
                     .background(
-                        color = Color.White,
-                        shape = shape
+                        color = Color.White, shape = shape
                     )
                     .clip(shape),
             ) {
                 Icon(
                     modifier = Modifier.size(28.dp),
                     painter = painterResource(id = R.drawable.notification),
-                    contentDescription = "", tint = Color.Black
+                    contentDescription = "",
+                    tint = Color.Black
                 )
             }
         }
 
-
-    }
-
+    }, backgroundColor = MaterialTheme.colors.surface)
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewHeaderItem() {
-    HeaderItem()
+    TopBar(onNavigationIconClick = {})
 
 }

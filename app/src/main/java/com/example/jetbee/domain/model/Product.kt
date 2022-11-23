@@ -11,6 +11,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Parcelize
 data class Product(
+    val description: String  = "",
     val name: String = "",
     val category: String= "",
     val image: String = "",

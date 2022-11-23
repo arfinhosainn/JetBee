@@ -1,4 +1,3 @@
-/*
 package com.example.jetbee.navigation
 
 import androidx.compose.animation.*
@@ -6,27 +5,19 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.jetbee.presentaion.cart_screen.components.CartScreen
-import com.example.jetbee.presentaion.detail_screen.DetailScreen
-import com.example.jetbee.presentaion.detail_screen.ProductDetailViewModel
-import com.example.jetbee.presentaion.home_screen.HomeScreen
-import com.example.jetbee.presentaion.signin_screen.SignInScreen
-import com.example.jetbee.presentaion.signup_screen.SignUpScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun NavGraph(
+fun NavigationGraph(
     navController: NavHostController = rememberAnimatedNavController(),
-    detailViewModel: ProductDetailViewModel = hiltViewModel()
 ) {
-    val state = detailViewModel.product.value
 
     AnimatedNavHost(
         navController = navController,
@@ -37,7 +28,7 @@ fun NavGraph(
             //SignInScreen(navController = navController)
         }
         composable(route = Screens.FireSignUpScreen.route) {
-            SignUpScreen(navController = navController)
+          //  SignUpScreen(navController = navController, navigator = navigator)
         }
         composable(route = Screens.Details.route, arguments = listOf(
             navArgument("name"){
@@ -64,12 +55,11 @@ fun NavGraph(
 
             }
         ) {
-           // HomeScreen(navController = navController)
+            //HomeScreen(navController = navController, )
         }
         composable(route = Screens.CartScreen.route) {
-
-            //CartScreen(navController = navController)
+            CartScreen(navController = navController)
         }
     }
 
-}*/
+}

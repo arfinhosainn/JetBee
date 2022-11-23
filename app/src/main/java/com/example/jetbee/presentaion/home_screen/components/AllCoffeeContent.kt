@@ -25,7 +25,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.jetbee.domain.model.CartProducts
 import com.example.jetbee.domain.model.Product
@@ -43,7 +42,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun AllCoffeeContent(
     product: List<Product>,
-    navController : NavHostController,
     navigator: DestinationsNavigator
     ) {
 
@@ -129,7 +127,7 @@ fun CoffeeCard(
                     modifier = Modifier
                         .size(30.dp)
                         .clickable {
-                            addTOCard(
+                            addToCart(
                                 userViewModel = userViewModel,
                                 coffeeCartViewModel = coffeeCartViewModel,
                                 product = product
@@ -152,7 +150,7 @@ fun CoffeeCard(
 }
 
 
-fun addTOCard(
+fun addToCart(
     userViewModel: UserViewModel,
     coffeeCartViewModel: CoffeeCartViewModel,
     product: Product
@@ -174,7 +172,6 @@ fun addTOCard(
         }
 
     }
-
 }
 
 

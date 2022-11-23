@@ -14,14 +14,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.jetbee.presentaion.common.UserViewModel
 
 @Composable
 fun BottomNavigationBar(
     items: List<BottomNavItem>,
     navController: NavController,
-    onItemClick: (BottomNavItem) -> Unit
+    onItemClick: (BottomNavItem) -> Unit,
+     userViewModel: UserViewModel = hiltViewModel()
 ) {
     val backStafckEntry = navController.currentBackStackEntryAsState()
     BottomNavigation(modifier = Modifier.clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)), backgroundColor = Color.Black) {
@@ -43,6 +46,7 @@ fun BottomNavigationBar(
                                     contentDescription = "Item Icon"
                                 )
                             }
+                            userViewModel.updateUserData()
                         } else {
                             Icon(
                                 painter = painterResource(id = item.icon),

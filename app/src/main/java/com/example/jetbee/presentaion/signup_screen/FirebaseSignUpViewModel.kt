@@ -28,7 +28,7 @@ class FirebaseSignupViewModel @Inject constructor(
                     _signUpState.send(FirebaseSignUpState(isLoading = true))
                 }
                 is Resource.Success -> {
-                    _signUpState.send(FirebaseSignUpState(isSignedIn = "Signed In Successful"))
+                    _signUpState.send(FirebaseSignUpState(isSignedUp = "Signed In Successful"))
                 }
                 is Resource.Error -> {
                     _signUpState.send(FirebaseSignUpState(error = result.message))

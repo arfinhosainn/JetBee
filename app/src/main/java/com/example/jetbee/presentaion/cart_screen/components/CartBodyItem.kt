@@ -64,6 +64,7 @@ fun CartBodyItem(
                 Text(
                     modifier = Modifier.clickable {
                         userViewModel.deleteCoffeeFromCart(cartProducts = cartProduct)
+                        userViewModel.updateUserData()
                     },
                     text = cartProduct.productName,
                     maxLines = 1,

@@ -12,6 +12,8 @@ sealed class Screens(val route: String) {
             return "Details_Screen/$name"
         }
     }
+    object Faka : Screens(route = "faka_screen")
+
 
 
 }
