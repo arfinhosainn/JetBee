@@ -7,13 +7,19 @@ sealed class Screens(val route: String) {
     object CartScreen : Screens(route = "Cart_Screen")
     object Favourite : Screens(route = "Favourite_Screen")
     object Profile : Screens(route = "Profile_Screen")
-    object Details : Screens(route = "Details_Screen"){
-        fun passHeroId(name: String): String {
+    object Details : Screens(route = "Details_Screen") {
+        fun passName(name: String): String {
             return "Details_Screen/$name"
         }
     }
-    object Faka : Screens(route = "faka_screen")
 
+    object Order : Screens(route = "Order_Screen")
+    object PersonalDetails : Screens(route = "Personal_Details")
+    object DeliveryAddress : Screens(route = "Delivery_Address")
+    object PaymentMethod : Screens(route = "Payment_Method")
+    object About : Screens(route = "About")
+    object Help : Screens(route = "Help")
+    object LogOut : Screens(route = "LogOut")
 
 
 }

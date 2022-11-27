@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -31,6 +32,7 @@ import com.example.jetbee.presentaion.cart_screen.CoffeeCartViewModel
 import com.example.jetbee.presentaion.cart_screen.components.AppTopBar
 import com.example.jetbee.presentaion.common.RegularFont
 import com.example.jetbee.presentaion.common.UserViewModel
+import com.example.jetbee.ui.theme.LightBlack
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,11 +47,16 @@ fun DetailScreen(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    Scaffold(modifier = Modifier.padding(top = 15.dp), topBar = {
+    Scaffold(topBar = {
         AppTopBar(
-            title = "Detail Item ", navController = navController, navIcon = painterResource(
+            title = "Detail Item",
+            navController = navController,
+            navIcon = painterResource(
                 id = R.drawable.back_icon
-            ), actionIcon = painterResource(id = R.drawable.heart)
+            ),
+            actionIcon = painterResource(id = R.drawable.heart),
+            backGroundColor = LightBlack,
+            titleColor = Color.White
         )
     }, content = { paddingValues ->
         Column(
@@ -60,11 +67,12 @@ fun DetailScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(380.dp),
-                contentAlignment = Alignment.Center
+                    .height(340.dp)
+                    .background(LightBlack),
+                contentAlignment = Alignment.Center,
             ) {
                 Image(
-                    modifier = Modifier.size(250.dp),
+                    modifier = Modifier.size(200.dp),
                     painter = rememberAsyncImagePainter(model = product.image),
                     contentDescription = "Product Image"
                 )
@@ -73,6 +81,8 @@ fun DetailScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
+                    .background(Color.Black)
+                    .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
             ) {
                 Row(
                     modifier = Modifier
@@ -86,7 +96,8 @@ fun DetailScreen(
                         fontFamily = RegularFont,
                         fontWeight = FontWeight.Medium,
                         fontSize = 20.sp,
-                        maxLines = 2
+                        maxLines = 2,
+                        style = TextStyle(color = Color.White)
                     )
                     Text(
                         modifier = Modifier.weight(1f),
@@ -126,13 +137,20 @@ fun DetailScreen(
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         categoryList.forEach { milk ->
-                            Chip(onClick = { /*TODO*/ }) {
+                            Chip(
+                                onClick = { /*TODO*/ }, colors = ChipDefaults.chipColors(
+                                    backgroundColor = Color.Black, contentColor = Color.White
+                                )
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.cup),
+                                    contentDescription = "Cup Icon", modifier = Modifier.size(25.dp)
+                                )
                                 Text(
                                     text = milk,
-                                    fontSize = 15.sp,
+                                    fontSize = 12.sp,
                                     fontFamily = RegularFont,
                                     fontWeight = FontWeight.Medium,
-                                    style = TextStyle(color = Color.Gray)
                                 )
                             }
                         }
@@ -191,7 +209,7 @@ fun DetailScreen(
                     Column {
                         Text(
                             text = "Total Price:",
-                            fontSize = 15.sp,
+                            fontSize = 18.sp,
                             fontFamily = RegularFont,
                             fontWeight = FontWeight.Medium, style = TextStyle(color = Color.Gray)
                         )
@@ -199,7 +217,7 @@ fun DetailScreen(
                             text = "$ ${product.price}",
                             fontSize = 25.sp,
                             fontFamily = RegularFont,
-                            fontWeight = FontWeight.Bold, style = TextStyle(color = Color.Black)
+                            fontWeight = FontWeight.Bold, style = TextStyle(color = Color.White)
                         )
                     }
 
@@ -224,8 +242,8 @@ fun DetailScreen(
                         },
                         shape = RoundedCornerShape(50.dp),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Black,
-                            contentColor = Color.White,
+                            backgroundColor = Color.White,
+                            contentColor = Color.Black,
                         )
 
                     ) {
@@ -243,13 +261,11 @@ fun DetailScreen(
                                 fontFamily = RegularFont
                             )
                         }
-
                     }
-
                 }
             }
         }
-    })
+    }, backgroundColor = Color.Black)
 }
 
 
@@ -284,7 +300,6 @@ val categoryList = listOf<String>("Soy Milk", "Cow Milk", "Camel Milk")
 @Preview(showBackground = true)
 @Composable
 fun PreviewDetailScreen() {
-
     DetailScreen(
         product = Product(),
         navController = rememberNavController()

@@ -6,34 +6,35 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
+import com.example.jetbee.R
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.jetbee.domain.model.CartProducts
 import com.example.jetbee.domain.model.Product
+import com.example.jetbee.navigation.Screens
 import com.example.jetbee.presentaion.cart_screen.CoffeeCartViewModel
 import com.example.jetbee.presentaion.common.RegularFont
 import com.example.jetbee.presentaion.common.UserViewModel
-import com.example.jetbee.presentaion.destinations.MainDetailScreenDestination
+import com.example.jetbee.presentaion.detail_screen.DetailViewModel
 import com.example.jetbee.ui.theme.LightBlack
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,14 +43,15 @@ import kotlinx.coroutines.launch
 @Composable
 fun AllCoffeeContent(
     product: List<Product>,
-    navigator: DestinationsNavigator
-    ) {
+    navController: NavController,
+    detailViewModel: DetailViewModel
+) {
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(130.dp),
         content = {
             items(product.size) { i ->
-                CoffeeCard( product = product[i], navigator = navigator)
+                CoffeeCard(product = product[i], navController = navController, detailViewModel = detailViewModel)
             }
         })
 
@@ -61,19 +63,19 @@ fun CoffeeCard(
     product: Product,
     userViewModel: UserViewModel = hiltViewModel(),
     coffeeCartViewModel: CoffeeCartViewModel = hiltViewModel(),
-    navigator: DestinationsNavigator,
-    ) {
+    detailViewModel: DetailViewModel  ,
+    navController: NavController,
+) {
 
     Card(
         modifier = Modifier
             .height(270.dp)
             .padding(6.dp)
             .clickable {
-                navigator.navigate(
-                    MainDetailScreenDestination(product.name, product = product  )
-                )
+                detailViewModel.setProduct(product)
+                navController.navigate(Screens.Details.route)
             }
-            .width(213.dp), backgroundColor = if (isSystemInDarkTheme()) LightBlack else Color.Red,
+            .width(213.dp), backgroundColor = if (isSystemInDarkTheme()) LightBlack else LightBlack,
         shape = RoundedCornerShape(25.dp)
     ) {
         Column(
@@ -139,7 +141,7 @@ fun CoffeeCard(
                 ) {
                     Icon(
                         modifier = Modifier.size(20.dp),
-                        imageVector = Icons.Default.Add,
+                        painter  = painterResource(id = R.drawable.cart),
                         contentDescription = "Filter Icon", tint = Color.Black
                     )
 

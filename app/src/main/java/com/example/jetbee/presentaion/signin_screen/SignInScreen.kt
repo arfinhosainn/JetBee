@@ -34,16 +34,16 @@ import com.example.jetbee.presentaion.common.RegularFont
 import com.google.android.gms.auth.api.identity.BeginSignInResult
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider.getCredential
-import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Destination(start = true)
+
 @Composable
-fun SignInScreen(navController: NavController,
+fun SignInScreen(
     oneTapSignInViewModel: OneTapSignInViewModel = hiltViewModel(),
     signInViewModel: FirebaseSingInViewModel = hiltViewModel(),
-    ) {
+    navController: NavController,
+) {
 
 
     val signInState = signInViewModel.signInState.collectAsState(initial = null)
@@ -65,7 +65,9 @@ fun SignInScreen(navController: NavController,
     LaunchedEffect(key1 = Unit) {
         if (isUserExist.value) {
             navController.popBackStack()
-            navController.navigate(Screens.HomeScreen.route)
+           navController.navigate(
+               Screens.HomeScreen.route
+           )
         }
     }
 
@@ -175,7 +177,9 @@ fun SignInScreen(navController: NavController,
                 modifier = Modifier
                     .padding(15.dp)
                     .clickable {
-                        navController.navigate(Screens.FireSignUpScreen.route)
+                        navController.navigate(
+                            Screens.FireSignUpScreen.route
+                        )
                     },
                 text = "Don't have an account? sign up",
                 fontWeight = FontWeight.Bold, color = Color.Black, fontFamily = RegularFont
@@ -211,7 +215,6 @@ fun SignInScreen(navController: NavController,
                 Screens.HomeScreen.route
             )
         }
-
     }
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
@@ -232,8 +235,6 @@ fun SignInScreen(navController: NavController,
         val intent = IntentSenderRequest.Builder(signInResult.pendingIntent.intentSender).build()
         launcher.launch(intent)
     }
-
-
 }
 
 

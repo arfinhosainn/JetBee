@@ -17,7 +17,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.example.jetbee.presentaion.common.RegularFont
 
 
@@ -26,14 +25,16 @@ fun AppTopBar(
     title: String,
     navController: NavController,
     navIcon: Painter? = null,
-    actionIcon: Painter? = null
+    actionIcon: Painter? = null,
+    backGroundColor: Color,
+    titleColor: Color
 ) {
     TopAppBar(
         title = {
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Text(
                     text = title,
-                    color = Color.Black,
+                    color = titleColor,
                     fontFamily = RegularFont,
                     fontWeight = FontWeight.Medium, fontSize = 25.sp
                 )
@@ -69,7 +70,7 @@ fun AppTopBar(
 
             // horizontal = 15.dp
         ),
-        backgroundColor = Color.White, elevation = 0.dp
+        backgroundColor =backGroundColor, elevation = 0.dp
     )
 }
 

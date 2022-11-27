@@ -1,9 +1,11 @@
 package com.example.jetbee.presentaion.cart_screen.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,14 +16,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.jetbee.presentaion.common.RegularFont
 import com.example.jetbee.presentaion.common.UserViewModel
-import com.example.jetbee.ui.theme.DarkYellow
 import com.example.jetbee.ui.theme.LightGray100
-import java.math.RoundingMode
 import kotlin.math.roundToInt
 
 @Composable
@@ -29,104 +30,57 @@ fun CartBillItem(modifier: Modifier = Modifier, userViewModel: UserViewModel = h
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(190.dp),
+            .height(140.dp),
         elevation = 20.dp,
         shape = RoundedCornerShape(topEnd = 30.dp, topStart = 30.dp),
-        backgroundColor = LightGray100
+        backgroundColor = Color.White
     ) {
-        Column(
-            modifier = Modifier
-                .padding(top = 15.dp)
-                .fillMaxWidth()
-        ) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom
             ) {
-                Text(
-                    modifier = Modifier.align(Alignment.Bottom),
-                    text = "Delivery",
-                    fontFamily = RegularFont,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 17.sp, color = Color.White
-                )
-                Box(
-                    Modifier
-                        .height(2.dp)
-                        .width(200.dp)
-                        .padding(start = 10.dp)
-                        .background(Color.Gray, shape = DottedShape(step = 10.dp)),
-                )
-
-                Text(
+                Column {
+                    Text(
+                        text = "Total Price",
+                        fontSize = 20.sp,
+                        fontFamily = RegularFont,
+                        style = TextStyle(color = Color.Black)
+                    )
+                    Text(
+                        text = "$${calculateTotalPrice(userViewModel)}",
+                        fontFamily = RegularFont,
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.Medium,
+                        style = TextStyle(color = Color.Black)
+                    )
+                }
+                Button(
+                    onClick = { /*TODO*/ },
                     modifier = Modifier
-                        .padding(start = 20.dp),
-                    text = "$5.99",
-                    fontFamily = RegularFont,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 17.sp, color = Color.White
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    modifier = Modifier.align(Alignment.Bottom),
-                    text = "Coffee",
-                    fontFamily = RegularFont,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 17.sp, color = Color.White
-                )
-                Box(
-                    Modifier
-                        .height(2.dp)
-                        .width(210.dp)
-                        .padding(start = 10.dp)
-                        .background(Color.Gray, shape = DottedShape(step = 10.dp)),
-                )
+                        .height(55.dp),
+                    shape = RoundedCornerShape(15.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.Black, contentColor = Color.White
+                    )
+                ) {
+                    Text(
+                        "Check Out",
+                        fontFamily = RegularFont,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 18.sp
+                    )
+                }
 
-                Text(
-                    modifier = Modifier
-                        .padding(start = 20.dp),
-                    text = "$${calculateTotalPrice(userViewModel)}",
-                    fontFamily = RegularFont,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 17.sp, color  = Color.White
-                )
             }
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, start = 25.dp, end = 25.dp, bottom = 15.dp),
-            verticalArrangement = Arrangement.Bottom
-        ) {
-            Divider(color = Color.LightGray)
 
-            Button(
-                onClick = { /*TODO*/ },
-                modifier = Modifier
-                    .height(55.dp)
-                    .fillMaxWidth(),
-                shape = RoundedCornerShape(30.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = DarkYellow, contentColor = Color.Black
-                )
-            ) {
-                Text(
-                    "Pay $${calculateTotalPrice(userViewModel).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)}",
-                    fontFamily = RegularFont,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 18.sp
-                )
-            }
         }
     }
 }
+
 
 private fun calculateTotalPrice(userViewModel: UserViewModel): Float {
     val price = userViewModel.userState.value.cartProducts.map {

@@ -1,5 +1,3 @@
-@file:JvmName("SignUpScreenKt")
-
 package com.example.jetbee.presentaion.signup_screen
 
 
@@ -23,24 +21,22 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.jetbee.R
 import com.example.jetbee.domain.model.AuthUser
+import com.example.jetbee.navigation.Screens
 import com.example.jetbee.presentaion.common.AuthenticationField
 import com.example.jetbee.presentaion.common.RegularFont
-import com.example.jetbee.presentaion.destinations.HomeScreenDestination
-import com.example.jetbee.presentaion.destinations.SignInScreenDestination
 import com.example.jetbee.presentaion.signin_screen.FirebaseSignupViewModel
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Destination
+
 @Composable
 fun SignUpScreen(
-    navigator: DestinationsNavigator, signUpViewModel: FirebaseSignupViewModel = hiltViewModel(),
-
-    ) {
+    signUpViewModel: FirebaseSignupViewModel = hiltViewModel(),
+    navController: NavController
+) {
 
     val signUpState = signUpViewModel.signUpState.collectAsState(initial = null)
 
@@ -183,10 +179,12 @@ fun SignUpScreen(
 
     LaunchedEffect(key1 = signUpState.value?.isSignedUp) {
         if (signUpState.value?.isSignedUp?.isNotEmpty() == true) {
-            navigator.popBackStack()
+            navController.popBackStack()
             val successful = signUpState.value?.isSignedUp
             Toast.makeText(context, successful, Toast.LENGTH_LONG).show()
-            navigator.navigate(HomeScreenDestination)
+            navController.navigate(
+                Screens.HomeScreen.route
+            )
         }
     }
 }

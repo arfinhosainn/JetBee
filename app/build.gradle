@@ -6,19 +6,10 @@ plugins {
     id("kotlin-parcelize")
     id 'dagger.hilt.android.plugin'
     id 'kotlinx-serialization'
-    id 'com.google.devtools.ksp' version '1.6.10-1.0.2'
+
+
 }
 
-kotlin {
-    sourceSets {
-        debug {
-            kotlin.srcDir("build/generated/ksp/debug/kotlin")
-        }
-        release {
-            kotlin.srcDir("build/generated/ksp/release/kotlin")
-        }
-    }
-}
 
 android {
     namespace 'com.example.jetbee'
@@ -112,14 +103,10 @@ dependencies {
     implementation "com.google.android.gms:play-services-auth:20.4.0"
 
     implementation 'com.google.firebase:firebase-auth:21.1.0'
-
-
+    
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-alpha02'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha02'
     implementation 'androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha02'
 
-
-    implementation 'io.github.raamcosta.compose-destinations:core:1.1.2-beta'
-    ksp 'io.github.raamcosta.compose-destinations:ksp:1.1.2-beta'
 
 }

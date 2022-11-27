@@ -42,17 +42,17 @@ fun SearchBox() {
                     modifier = Modifier
                         .size(30.dp)
                         .clip(shape = CircleShape)
-                        .background(Color.White), contentAlignment = Alignment.Center
+                        .background(Color.Black), contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         modifier = Modifier.size(20.dp),
                         painter = painterResource(id = R.drawable.filter),
-                        contentDescription = "Filter Icon", tint = Color.Black
+                        contentDescription = "Filter Icon", tint = Color.White
                     )
 
                 }
             }, colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = if (isSystemInDarkTheme()) Color.White else Color.Black,
+                backgroundColor = if (isSystemInDarkTheme()) Color.White else Color.White,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
