@@ -1,15 +1,18 @@
 package com.example.jetbee.domain.repository
 
+import com.example.jetbee.domain.model.AuthUser
 import com.example.jetbee.util.Resource
-import com.google.android.gms.auth.api.identity.BeginSignInResult
 import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.AuthResult
 import kotlinx.coroutines.flow.Flow
 
 interface GoogleSignInRepository {
-    fun oneTapSignInWithGoogle(): Flow<Resource<BeginSignInResult>>
-
-  suspend  fun firebaseSingnInWithGoogle(googleCredential:AuthCredential): Resource<Boolean>
 
     suspend fun addUserToFireStore()
+
+    fun signInWithCredential(
+        credentials: AuthCredential,
+        user: AuthUser
+    ): Flow<Resource<AuthResult>>
 
 }

@@ -6,6 +6,8 @@ import com.example.jetbee.domain.model.Product
 import com.example.jetbee.presentaion.order_screen.Order
 import com.example.jetbee.util.Resource
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.Transaction
 import kotlinx.coroutines.flow.Flow
@@ -31,10 +33,13 @@ interface FirebaseRepository {
     fun currentUser(): FirebaseUser?
 
     suspend fun addOrders(
-        orderList: MutableList<Order>,onSuccess: () -> Unit,
+        orderList: MutableList<Order>, onSuccess: () -> Unit,
         onFailure: (String?) -> Unit,
     )
 
     fun increaseProductQuantity(documentId: String): Task<Transaction>
+
+    fun userLogOut()
+
 
 }

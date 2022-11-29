@@ -11,12 +11,15 @@ import com.example.jetbee.util.Constant.QUANTITY
 import com.example.jetbee.util.Constant.USER_COLLECTION
 import com.example.jetbee.util.Resource
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.channels.awaitClose
@@ -172,7 +175,13 @@ class FirebaseRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun userLogOut() {
+        return firebaseAuth.signOut()
+    }
+
+
+
     private val userCartCollection = currentUser()?.uid?.let {
         fireStore.collection(USER_COLLECTION)
     }
-}
+   }

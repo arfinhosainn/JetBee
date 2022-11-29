@@ -9,7 +9,6 @@ fun SignInWithGoogle(
     navigateToHomeScreen: (signedIn: Boolean) -> Unit
 ) {
 
-    val state = viewModel.signInWithGoogleState.value
 
 
 

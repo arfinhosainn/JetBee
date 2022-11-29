@@ -1,16 +1,17 @@
 package com.example.jetbee.presentaion.profile_screen
 
-import android.widget.Toast
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.jetbee.R
 import com.example.jetbee.navigation.Screens
@@ -29,7 +31,10 @@ import com.example.jetbee.presentaion.cart_screen.components.AppTopBar
 import com.example.jetbee.presentaion.common.RegularFont
 
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun ProfileScreen(
+    navController: NavController,
+    profileViewModel: ProfileViewModel = hiltViewModel(),
+) {
 
     val context = LocalContext.current
 
@@ -113,8 +118,17 @@ fun ProfileScreen(navController: NavController) {
                     )
                 ),
                 onMenuItemClick = {
-                    it.route
-                    Toast.makeText(context, it.route, Toast.LENGTH_SHORT).show()
+                    when (it.route) {
+                        "LogOut" -> {
+                            profileViewModel.signOut()
+                            navController.navigate(Screens.FireSignInScreen.route){
+                                popUpTo(route = Screens.HomeScreen.route) {
+                                    inclusive = true
+                                }
+                            }
+                        }
+                    }
+                    //Toast.makeText(context, it.route, Toast.LENGTH_SHORT).show()
                 }
             )
         }
@@ -125,7 +139,8 @@ fun ProfileScreen(navController: NavController) {
 @Composable
 fun ListOfItem(
     items: List<ProfileMenuItem>,
-    onMenuItemClick: (ProfileMenuItem) -> Unit
+    onMenuItemClick: (ProfileMenuItem) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     items.forEach { item ->
         Card(
@@ -172,7 +187,9 @@ fun ListOfItem(
 
 @Preview(showBackground = true)
 @Composable
-fun Pridjf() {
+fun ProfileMenu(
+    modifier: Modifier = Modifier
+) {
 
     ListOfItem(items =
     listOf(

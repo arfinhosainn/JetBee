@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
 import com.example.jetbee.presentaion.detail_screen.DetailViewModel
+import com.example.jetbee.presentaion.signin_screen.OneTapSignInViewModel
 import com.example.jetbee.ui.theme.JetBeeTheme
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val productDetailViewModel = viewModels<DetailViewModel>()
+    private val oneTapSignInViewModel = viewModels<OneTapSignInViewModel>()
 
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,8 +23,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             JetBeeTheme {
                 val navController = rememberAnimatedNavController()
-            
-            NavigationGraph(navController = navController, detailViewModel = productDetailViewModel.value)
+
+                NavigationGraph(
+                    navController = navController,
+                    detailViewModel = productDetailViewModel.value,
+                    oneTapSignInViewModel = oneTapSignInViewModel.value
+                )
             }
         }
     }

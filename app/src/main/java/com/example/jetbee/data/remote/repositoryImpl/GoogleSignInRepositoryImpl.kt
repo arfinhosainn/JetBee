@@ -1,12 +1,11 @@
 package com.example.jetbee.data.remote.repositoryImpl
 
+import com.example.jetbee.domain.model.AuthUser
 import com.example.jetbee.domain.repository.GoogleSignInRepository
 import com.example.jetbee.util.Constant.USER_COLLECTION
 import com.example.jetbee.util.Resource
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.BeginSignInResult
-import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldValue.serverTimestamp
@@ -16,60 +15,43 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
-import javax.inject.Named
 
 class GoogleSignInRepositoryImpl @Inject constructor(
-    private val firestore: FirebaseFirestore,
-    private val auth: FirebaseAuth,
-    private var oneTapClient: SignInClient,
-    @Named("sign_in_request")
-    private var signInRequest: BeginSignInRequest,
-    @Named("sign_up_request")
-    private var signUpRequest: BeginSignInRequest
+    private val fireStore: FirebaseFirestore,
+    private val firebaseAuth: FirebaseAuth,
 ) : GoogleSignInRepository {
-    override fun oneTapSignInWithGoogle(): Flow<Resource<BeginSignInResult>> {
-        return flow {
-            emit(Resource.Loading())
-            val result = oneTapClient.beginSignIn(signInRequest).await()
-            emit(Resource.Success(result))
-        }.catch {
-            try {
-                val signUpResult = oneTapClient.beginSignIn(signUpRequest).await()
-                emit(Resource.Success(signUpResult))
-            } catch (e: Exception) {
-                emit(Resource.Error(e.message.toString()))
-            }
-        }
-    }
-
-    override suspend fun firebaseSingnInWithGoogle(googleCredential: AuthCredential): Resource<Boolean> {
-        return try {
-            val authResult = auth.signInWithCredential(googleCredential).await()
-            val isNewUser = authResult.additionalUserInfo?.isNewUser ?: false
-            if (isNewUser) {
-                addUserToFireStore()
-            }
-            Resource.Success(true)
-        } catch (e: Exception) {
-            Resource.Error(result = e.message.toBoolean(), message = "")
-        }
-    }
-
-    override suspend fun addUserToFireStore() {
-        auth.currentUser?.apply {
-            val user = toUser()
-            firestore.collection(USER_COLLECTION).document(uid).set(user).await()
-
-        }
-    }
-
 
     private fun FirebaseUser.toUser() = mapOf(
-        "displayname" to displayName,
+        "displayName" to displayName,
         "email" to email,
-        "photourl" to photoUrl?.toString(),
-        "createdat" to serverTimestamp()
+        "photoUrl" to photoUrl?.toString(),
+        "createDate" to serverTimestamp()
     )
+
+    override fun signInWithCredential(
+        credentials: AuthCredential,
+        user: AuthUser
+    ): Flow<Resource<AuthResult>> {
+        return flow {
+            emit(Resource.Loading())
+            val result = firebaseAuth.signInWithCredential(credentials).await()
+            val userUid = result.user?.uid
+            fireStore.collection(USER_COLLECTION).document(userUid!!).set(
+                addUserToFireStore()
+            )
+            emit(Resource.Success(result))
+        }.catch {
+            emit(Resource.Error(it.message.toString()))
+        }
+    }
+
+
+    override suspend fun addUserToFireStore() {
+        firebaseAuth.currentUser?.apply {
+            val user = toUser()
+            fireStore.collection(USER_COLLECTION).document(uid).set(user).await()
+        }
+    }
 
 
 }

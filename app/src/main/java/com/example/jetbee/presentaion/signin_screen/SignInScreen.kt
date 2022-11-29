@@ -1,9 +1,7 @@
 package com.example.jetbee.presentaion.signin_screen
 
-import android.app.Activity.RESULT_OK
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -31,27 +29,39 @@ import com.example.jetbee.domain.model.AuthUser
 import com.example.jetbee.navigation.Screens
 import com.example.jetbee.presentaion.common.AuthenticationField
 import com.example.jetbee.presentaion.common.RegularFont
-import com.google.android.gms.auth.api.identity.BeginSignInResult
+import com.example.jetbee.util.Constant.SERVER_CLIENT_ID
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.GoogleAuthProvider.getCredential
+import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun SignInScreen(
-    oneTapSignInViewModel: OneTapSignInViewModel = hiltViewModel(),
+    oneTapSignInViewModel: OneTapSignInViewModel,
     signInViewModel: FirebaseSingInViewModel = hiltViewModel(),
     navController: NavController,
 ) {
+    val googleState = oneTapSignInViewModel.googleSingInState.collectAsState()
 
+
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                val credentials = GoogleAuthProvider.getCredential(account.idToken!!, null)
+                oneTapSignInViewModel.signInWithGoogleCredentials(credentials, user = AuthUser())
+            } catch (it: ApiException) {
+                print(it)
+            }
+        }
 
     val signInState = signInViewModel.signInState.collectAsState(initial = null)
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    var isLoading by remember {
-        mutableStateOf(false)
-    }
     val isUserExist = signInViewModel.currentUserExist.collectAsState(initial = true)
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
@@ -65,9 +75,9 @@ fun SignInScreen(
     LaunchedEffect(key1 = Unit) {
         if (isUserExist.value) {
             navController.popBackStack()
-           navController.navigate(
-               Screens.HomeScreen.route
-           )
+            navController.navigate(
+                Screens.HomeScreen.route
+            )
         }
     }
 
@@ -177,9 +187,9 @@ fun SignInScreen(
                 modifier = Modifier
                     .padding(15.dp)
                     .clickable {
-                        navController.navigate(
-                            Screens.FireSignUpScreen.route
-                        )
+                          navController.navigate(
+                              Screens.FireSignUpScreen.route
+                          )
                     },
                 text = "Don't have an account? sign up",
                 fontWeight = FontWeight.Bold, color = Color.Black, fontFamily = RegularFont
@@ -188,7 +198,15 @@ fun SignInScreen(
                 modifier = Modifier
                     .padding(
                         top = 40.dp,
-                    ),
+                    ).clickable {
+                        val gso = GoogleSignInOptions
+                            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                            .requestIdToken(SERVER_CLIENT_ID)
+                            .requestEmail()
+                            .build()
+                        val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                        launcher.launch(googleSignInClient.signInIntent)
+                    },
                 text = "Or connect with",
                 fontWeight = FontWeight.Medium, color = Color.Gray
             )
@@ -216,25 +234,29 @@ fun SignInScreen(
             )
         }
     }
-    val launcher =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                try {
-                    val credentials =
-                        oneTapSignInViewModel.oneTapClient.getSignInCredentialFromIntent(result.data)
-                    val googleIdToken = credentials.googleIdToken
-                    val googleCredentials = getCredential(googleIdToken, null)
-                    oneTapSignInViewModel.signInWithGoogle(googleCredentials)
-                } catch (it: ApiException) {
-                    print(it)
-                }
-            }
-        }
 
-    fun launch(signInResult: BeginSignInResult) {
-        val intent = IntentSenderRequest.Builder(signInResult.pendingIntent.intentSender).build()
-        launcher.launch(intent)
+    LaunchedEffect(key1 = googleState.value.success) {
+        if (googleState.value.success != null) {
+            navController.popBackStack()
+            val successful = googleState.value.success.toString()
+            Toast.makeText(context, "successful", Toast.LENGTH_LONG).show()
+            navController.navigate(
+                Screens.HomeScreen.route
+            )
+        }
     }
+    /*LaunchedEffect(key1 = googleState.error) {
+        if (googleState.error?.isNotEmpty() == true) {
+            navController.popBackStack()
+            val error  = googleState.error
+            Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+            navController.navigate(
+                Screens.HomeScreen.route
+            )
+        }
+    }*/
+
+
 }
 
 
