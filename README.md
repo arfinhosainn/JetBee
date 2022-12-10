@@ -6,7 +6,7 @@ JetBee is a Modern Ecommerce application with Jetpack Compose, Hilt, Coroutines,
 
 ## Demo
 
-<img src="/preview/screenshot.jpg" align="center" width="3840"/>
+<img src="/preview/screenshots.jpg" align="center" width="3840"/>
 
 
 ## Tech stack & Open-source libraries
