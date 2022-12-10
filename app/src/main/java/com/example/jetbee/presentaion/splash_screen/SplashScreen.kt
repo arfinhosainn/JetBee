@@ -9,6 +9,9 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -23,11 +26,30 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.jetbee.R
+import com.example.jetbee.navigation.Screens
 import com.example.jetbee.presentaion.common.RegularFont
+import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(
+    splashScreenViewModel: SplashScreenViewModel = hiltViewModel(),
+    navController: NavController
+) {
+
+    val onboarding by splashScreenViewModel.onBoardingCompleted.collectAsState()
+
+    LaunchedEffect(key1 = true) {
+        delay(1000L)
+        navController.popBackStack()
+        if (onboarding) {
+            navController.navigate(Screens.HomeScreen.route)
+        } else {
+            navController.navigate(Screens.FireSignInScreen.route)
+        }
+    }
     Splash()
 }
 
@@ -43,7 +65,8 @@ fun Splash() {
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomStart)
-                .padding(start = 20.dp).background(
+                .padding(start = 20.dp)
+                .background(
                     Brush.verticalGradient(
                         0F to Color.Transparent,
                         .1F to Color.Black.copy(alpha = 0.5F),
@@ -54,8 +77,10 @@ fun Splash() {
             Text(
                 modifier = Modifier.padding(bottom = 40.dp),
                 text = "Enjoy the taste of\nour best coffee",
-                color = Color.White, fontSize = 30.sp,
-                style = MaterialTheme.typography.body2, fontFamily = com.example.jetbee.presentaion.common.SplashScreen
+                color = Color.White,
+                fontSize = 30.sp,
+                style = MaterialTheme.typography.body2,
+                fontFamily = com.example.jetbee.presentaion.common.SplashScreen
             )
             Row(
                 modifier = Modifier
@@ -80,16 +105,10 @@ fun Splash() {
                         fontFamily = RegularFont,
                         fontWeight = FontWeight.SemiBold
                     )
-
                 }
-
             }
-
         }
-
     }
-
-
 }
 
 

@@ -1,8 +1,11 @@
 package com.example.jetbee.di
 
 import android.app.Application
+import android.content.Context
+import com.example.jetbee.data.local.DataStoreOperationImpl
 import com.example.jetbee.data.remote.repositoryImpl.FirebaseRepositoryImpl
 import com.example.jetbee.data.remote.repositoryImpl.GoogleSignInRepositoryImpl
+import com.example.jetbee.domain.repository.DataStoreOperation
 import com.example.jetbee.domain.repository.FirebaseRepository
 import com.example.jetbee.domain.repository.GoogleSignInRepository
 import com.example.jetbee.presentaion.order_screen.OrderUseCase
@@ -14,6 +17,7 @@ import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -60,6 +64,13 @@ object FirebaseModule {
             application = application, firebaseRepository = ordersRepository
         )
     }
+
+    @Provides
+    @Singleton
+    fun provideDataStoreImpl(@ApplicationContext context: Context): DataStoreOperation {
+        return DataStoreOperationImpl(context)
+    }
+
 
     @Provides
     @Singleton

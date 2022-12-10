@@ -14,6 +14,7 @@ import com.example.jetbee.presentaion.profile_screen.ProfileScreen
 import com.example.jetbee.presentaion.signin_screen.OneTapSignInViewModel
 import com.example.jetbee.presentaion.signin_screen.SignInScreen
 import com.example.jetbee.presentaion.signup_screen.SignUpScreen
+import com.example.jetbee.presentaion.splash_screen.SplashScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 
@@ -27,10 +28,13 @@ fun NavigationGraph(
 
     AnimatedNavHost(
         navController = navController,
-        startDestination = Screens.FireSignInScreen.route
+        startDestination = Screens.SplashScreen.route
     ) {
         composable(route = Screens.FireSignInScreen.route) {
-            SignInScreen(navController = navController, oneTapSignInViewModel = oneTapSignInViewModel)
+            SignInScreen(
+                navController = navController,
+                oneTapSignInViewModel = oneTapSignInViewModel
+            )
         }
         composable(route = Screens.FireSignUpScreen.route) {
             SignUpScreen(navController = navController)
@@ -39,6 +43,9 @@ fun NavigationGraph(
             Log.d("Args", it.arguments?.getString(it.toString()).toString())
             MainDetailScreen(navController = navController, detailViewModel = detailViewModel)
 
+        }
+        composable(route = Screens.SplashScreen.route) {
+            SplashScreen(navController = navController)
         }
         composable(
             route = Screens.HomeScreen.route,

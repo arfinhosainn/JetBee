@@ -49,10 +49,10 @@ fun SignInScreen(
 
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+            val account = GoogleSignIn.getSignedInAccountFromIntent(it.data)
             try {
-                val account = task.getResult(ApiException::class.java)
-                val credentials = GoogleAuthProvider.getCredential(account.idToken!!, null)
+                val result = account.getResult(ApiException::class.java)
+                val credentials = GoogleAuthProvider.getCredential(result.idToken!!, null)
                 oneTapSignInViewModel.signInWithGoogleCredentials(credentials, user = AuthUser())
             } catch (it: ApiException) {
                 print(it)
@@ -187,9 +187,9 @@ fun SignInScreen(
                 modifier = Modifier
                     .padding(15.dp)
                     .clickable {
-                          navController.navigate(
-                              Screens.FireSignUpScreen.route
-                          )
+                        navController.navigate(
+                            Screens.FireSignUpScreen.route
+                        )
                     },
                 text = "Don't have an account? sign up",
                 fontWeight = FontWeight.Bold, color = Color.Black, fontFamily = RegularFont
@@ -198,54 +198,83 @@ fun SignInScreen(
                 modifier = Modifier
                     .padding(
                         top = 40.dp,
-                    ).clickable {
-                        val gso = GoogleSignInOptions
-                            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                            .requestIdToken(SERVER_CLIENT_ID)
-                            .requestEmail()
-                            .build()
-                        val googleSignInClient = GoogleSignIn.getClient(context, gso)
-                        launcher.launch(googleSignInClient.signInIntent)
-                    },
+                    ),
                 text = "Or connect with",
                 fontWeight = FontWeight.Medium, color = Color.Gray
             )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp), horizontalArrangement = Arrangement.Center
+            ) {
+                IconButton(onClick = {
+                    val gso = GoogleSignInOptions
+                        .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(SERVER_CLIENT_ID)
+                        .requestEmail()
+                        .build()
+                    val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                    launcher.launch(googleSignInClient.signInIntent)
+                }) {
+                    Icon(
+                        modifier = Modifier.size(50.dp),
+                        painter = painterResource(id = R.drawable.ic_google),
+                        contentDescription = "Google Icon", tint = Color.Unspecified
+                    )
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+                IconButton(onClick = {
+
+                }) {
+                    Icon(
+                        modifier = Modifier.size(52.dp),
+                        painter = painterResource(id = R.drawable.ic_facebook),
+                        contentDescription = "Google Icon", tint = Color.Unspecified
+                    )
+                }
+            }
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                if (googleState.value.isLoading == true) {
+                    CircularProgressIndicator()
+                }
+            }
+
         }
 
-    }
 
-
-    LaunchedEffect(key1 = signInState.value?.error) {
-        scope.launch(Dispatchers.Main) {
-            if (signInState.value?.error?.isNotEmpty() == true) {
-                val error = signInState.value?.error
-                Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+        LaunchedEffect(key1 = signInState.value?.error) {
+            scope.launch(Dispatchers.Main) {
+                if (signInState.value?.error?.isNotEmpty() == true) {
+                    val error = signInState.value?.error
+                    Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+                }
             }
         }
-    }
 
-    LaunchedEffect(key1 = signInState.value?.isSignedIn) {
-        if (signInState.value?.isSignedIn?.isNotEmpty() == true) {
-            navController.popBackStack()
-            val successful = signInState.value?.isSignedIn
-            Toast.makeText(context, successful, Toast.LENGTH_LONG).show()
-            navController.navigate(
-                Screens.HomeScreen.route
-            )
+        LaunchedEffect(key1 = signInState.value?.isSignedIn) {
+            if (signInState.value?.isSignedIn?.isNotEmpty() == true) {
+                navController.popBackStack()
+                val successful = signInState.value?.isSignedIn
+                Toast.makeText(context, successful, Toast.LENGTH_LONG).show()
+                navController.navigate(
+                    Screens.HomeScreen.route
+                )
+            }
         }
-    }
 
-    LaunchedEffect(key1 = googleState.value.success) {
-        if (googleState.value.success != null) {
-            navController.popBackStack()
-            val successful = googleState.value.success.toString()
-            Toast.makeText(context, "successful", Toast.LENGTH_LONG).show()
-            navController.navigate(
-                Screens.HomeScreen.route
-            )
+        LaunchedEffect(key1 = googleState.value.success) {
+            if (googleState.value.success != null) {
+                // navController.popBackStack()
+                navController.navigate(
+                    Screens.HomeScreen.route
+                )
+                val successful = googleState.value.success.toString()
+                Toast.makeText(context, "successful", Toast.LENGTH_LONG).show()
+
+            }
         }
-    }
-    /*LaunchedEffect(key1 = googleState.error) {
+
+        /*LaunchedEffect(key1 = googleState.error) {
         if (googleState.error?.isNotEmpty() == true) {
             navController.popBackStack()
             val error  = googleState.error
@@ -257,6 +286,7 @@ fun SignInScreen(
     }*/
 
 
+    }
 }
 
 
