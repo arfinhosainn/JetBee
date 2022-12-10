@@ -53,7 +53,7 @@ fun ProfileScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(top = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
@@ -78,42 +78,36 @@ fun ProfileScreen(
                     ProfileMenuItem(
                         name = "Order",
                         icon = R.drawable.delivery,
-                        actionIcon = R.drawable.back_icon,
                         route = Screens.Order.route
                     ),
                     ProfileMenuItem(
                         name = "Personal Details",
                         icon = R.drawable.profile,
-                        actionIcon = R.drawable.back_icon,
                         route = Screens.PersonalDetails.route
                     ),
                     ProfileMenuItem(
                         name = "Delivery Address",
                         icon = R.drawable.delivery,
-                        actionIcon = R.drawable.cart,
                         route = Screens.DeliveryAddress.route
                     ),
                     ProfileMenuItem(
                         name = "Payment Method",
                         icon = R.drawable.creditcard,
-                        actionIcon = R.drawable.back_icon,
                         route = Screens.PaymentMethod.route
                     ),
                     ProfileMenuItem(
                         name = "About",
                         icon = R.drawable.about,
-                        actionIcon = R.drawable.back_icon, route = Screens.About.route
+                        route = Screens.About.route
                     ),
                     ProfileMenuItem(
                         name = "Help",
                         icon = R.drawable.help,
-                        actionIcon = R.drawable.back_icon,
                         route = Screens.Help.route
                     ),
                     ProfileMenuItem(
                         name = "Log Out",
                         icon = R.drawable.logout,
-                        actionIcon = R.drawable.back_icon,
                         route = Screens.LogOut.route
                     )
                 ),
@@ -173,10 +167,12 @@ fun ListOfItem(
                         .weight(1f),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    Image(
-                        painter = painterResource(id = item.actionIcon),
-                        contentDescription = "Action Icon"
-                    )
+                    item.actionIcon?.let { painterResource(id = it) }?.let {
+                        Image(
+                            painter = it,
+                            contentDescription = "Action Icon"
+                        )
+                    }
                 }
             }
         }
@@ -196,42 +192,35 @@ fun ProfileMenu(
         ProfileMenuItem(
             name = "Order",
             icon = R.drawable.cart,
-            actionIcon = R.drawable.back_icon,
             route = Screens.Order.route
         ),
         ProfileMenuItem(
             name = "Personal Details",
             icon = R.drawable.cart,
-            actionIcon = R.drawable.back_icon,
             route = Screens.PersonalDetails.route
         ),
         ProfileMenuItem(
             name = "Delivery Address",
             icon = R.drawable.cart,
-            actionIcon = R.drawable.back_icon,
             route = Screens.DeliveryAddress.route
         ),
         ProfileMenuItem(
             name = "Payment Method",
             icon = R.drawable.cart,
-            actionIcon = R.drawable.back_icon,
             route = Screens.PaymentMethod.route
         ),
         ProfileMenuItem(
             name = "About",
-            icon = R.drawable.cart,
-            actionIcon = R.drawable.back_icon, route = Screens.About.route
+            icon = R.drawable.cart, route = Screens.About.route
         ),
         ProfileMenuItem(
             name = "Help",
             icon = R.drawable.cart,
-            actionIcon = R.drawable.back_icon,
             route = Screens.Help.route
         ),
         ProfileMenuItem(
             name = "Log Out",
             icon = R.drawable.cart,
-            actionIcon = R.drawable.back_icon,
             route = Screens.LogOut.route
         )
     ),

@@ -32,9 +32,7 @@ fun CartScreen(
         Scaffold(
             topBar = {
                 AppTopBar(
-                    title = "Cart", navController = navController, navIcon = painterResource(
-                        id = R.drawable.back_icon
-                    )
+                    title = "Cart", navController = navController
                 , backGroundColor = Color.Black, titleColor = Color.White)
             }, content = { padding ->
                 Card(

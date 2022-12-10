@@ -51,17 +51,13 @@ fun DetailScreen(
         AppTopBar(
             title = "Detail Item",
             navController = navController,
-            navIcon = painterResource(
-                id = R.drawable.back_icon
-            ),
-            actionIcon = painterResource(id = R.drawable.heart),
             backGroundColor = LightBlack,
             titleColor = Color.White
         )
     }, content = { paddingValues ->
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize().padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
             Box(

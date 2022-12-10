@@ -27,7 +27,8 @@ fun AppTopBar(
     navIcon: Painter? = null,
     actionIcon: Painter? = null,
     backGroundColor: Color,
-    titleColor: Color
+    titleColor: Color,
+    modifier: Modifier = Modifier
 ) {
     TopAppBar(
         title = {
@@ -39,8 +40,8 @@ fun AppTopBar(
                     fontWeight = FontWeight.Medium, fontSize = 25.sp
                 )
             }
-        },
-        navigationIcon = {
+        }
+        /*navigationIcon = {
             val radius = 18.dp
             val shape = RoundedCornerShape(radius)
             Box(
@@ -65,7 +66,7 @@ fun AppTopBar(
                     )
                 }
             }
-        },
+        }*/,
         modifier = Modifier.padding(
 
             // horizontal = 15.dp
